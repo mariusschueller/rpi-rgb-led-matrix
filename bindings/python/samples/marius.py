@@ -19,12 +19,9 @@ class Marius(SampleBase):
 
         # Animation loop
         while True:
-            print("restored data: " + str(restored_data))
             for frame in restored_data:  # Play through each frame
-                print("frame: " + str(frame))
-                for y, row in enumerate(frame):
-                    print("y" + str(y))
-                    print("row" + str(row))
+                # Handle the extra nesting by accessing the first level
+                for y, row in enumerate(frame[0]):  # Flatten one level of nesting
                     for x, (r, g, b) in enumerate(row):
                         # Set the pixel using RGB values from the frame
                         self.offset_canvas.SetPixel(x, y, r, g, b)
