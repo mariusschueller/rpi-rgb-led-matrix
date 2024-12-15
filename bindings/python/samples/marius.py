@@ -19,8 +19,12 @@ class Marius(SampleBase):
 
         # Animation loop
         while True:
+            print(restored_data)
             for frame in restored_data:  # Play through each frame
+                print(frame)
                 for y, row in enumerate(frame):
+                    print(y)
+                    print(row)
                     for x, (r, g, b) in enumerate(row):
                         # Set the pixel using RGB values from the frame
                         self.offset_canvas.SetPixel(x, y, r, g, b)
