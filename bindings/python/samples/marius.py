@@ -1,5 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from samplebase import SampleBase
+import marius_video
+import marius_site
+import time
 
 
 class Marius(SampleBase):
@@ -7,24 +10,30 @@ class Marius(SampleBase):
         super(Marius, self).__init__(*args, **kwargs)
 
     def run(self):
-        offset_canvas = self.matrix.CreateFrameCanvas()
+        # Fetch and preprocess data once
+        data = marius_site.get_data()
+        restored_data = marius_video.convert_to_ndarray(data)
+
+        # Initialize the canvas
+        self.offset_canvas = self.matrix.CreateFrameCanvas()
+
+        # Animation loop
         while True:
-            for x in range(0, self.matrix.width):
-                offset_canvas.SetPixel(x, x, 255, 255, 255)
-                offset_canvas.SetPixel(offset_canvas.height - 1 - x, x, 255, 0, 255)
+            for frame in restored_data:  # Play through each frame
+                for y, row in enumerate(frame):
+                    for x, (r, g, b) in enumerate(row):
+                        # Set the pixel using RGB values from the frame
+                        self.offset_canvas.SetPixel(x, y, r, g, b)
 
-            for x in range(0, offset_canvas.width):
-                offset_canvas.SetPixel(x, 0, 255, 0, 0)
-                offset_canvas.SetPixel(x, offset_canvas.height - 1, 255, 255, 0)
+                # Swap the canvas to display the frame
+                self.offset_canvas = self.matrix.SwapOnVSync(self.offset_canvas)
 
-            for y in range(0, offset_canvas.height):
-                offset_canvas.SetPixel(0, y, 0, 0, 255)
-                offset_canvas.SetPixel(offset_canvas.width - 1, y, 0, 255, 0)
-            offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
+                # Add a delay to control frame rate
+                time.sleep(0.05)  # Adjust frame delay as needed (e.g., 50ms per frame)
 
 
 # Main function
 if __name__ == "__main__":
     marius = Marius()
-    if (not marius.process()):
-        marius.print_help()
+    marius.process()  # Parse command-line arguments and set up the matrix
+    marius.run()  # Start the animation loop
