@@ -17,8 +17,9 @@ class Marius(SampleBase):
         # Initialize the canvas
         self.offset_canvas = self.matrix.CreateFrameCanvas()
 
+        count = 0
         # Animation loop
-        while True:
+        while count < 600:
             for frame in restored_data:  # Play through each frame
                 # Handle the extra nesting by accessing the first level
                 for y, row in enumerate(frame[0]):  # Flatten one level of nesting
@@ -31,10 +32,12 @@ class Marius(SampleBase):
 
                 # Add a delay to control frame rate
                 time.sleep(0.05)  # Adjust frame delay as needed (e.g., 50ms per frame)
+                count += 1
 
 
 # Main function
 if __name__ == "__main__":
     marius = Marius()
     marius.process()  # Parse command-line arguments and set up the matrix
-    marius.run()  # Start the animation loop
+    while True:
+        marius.run()  # Start the animation loop
