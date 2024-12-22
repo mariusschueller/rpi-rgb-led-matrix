@@ -19,7 +19,7 @@ class Marius(SampleBase):
 
         count = 0
         # Animation loop
-        while count < 600:
+        while count < 6000:
             for frame in restored_data:  # Play through each frame
                 # Handle the extra nesting by accessing the first level
                 for y, row in enumerate(frame[0]):  # Flatten one level of nesting
